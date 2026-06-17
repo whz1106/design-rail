@@ -1,193 +1,241 @@
-# Component Rules
+# 组件和模块规则
 
-Use these rules when designing or modifying recurring app modules.
+设计或修改重复出现的 app 模块时使用这些规则。
 
-Each section defines what the module is for, what must stay stable, and what should not be reinvented locally.
+每个部分定义：模块作用、必须保持稳定的内容、禁止局部重造的内容。
+
+## 组件库复用原则
+
+进入实现前，先判断项目里有哪些可复用组件。
+
+检查顺序：
+
+1. 当前 surface 附近已有组件
+2. `src/components/ui`
+3. `src/renderer/components/ui`
+4. `components/ui`
+5. `package.json` 里的 UI 组件库
+6. 项目已有 theme token 和 CSS variables
+
+实现优先级：
+
+1. 复用已有业务组件
+2. 复用项目 `ui` 组件入口
+3. 复用已安装组件库 primitives
+4. 做轻量 wrapper
+5. 最后才自定义组件
+
+不要重写已有基础控件：
+
+- Button
+- Input
+- Select
+- Dialog / Modal
+- Tabs
+- Dropdown
+- Tooltip
+- Card
+- Badge
+- Switch / Checkbox
+- Table / List primitives
+
+如果确实需要新增组件或组件库，必须先说明：
+
+- 为什么已有组件不够
+- 会影响哪些 surface
+- 是否会引入第二套视觉语言
+- 是否需要用户确认依赖安装
 
 ## App Shell
 
-Role:
+作用：
 
-- provide the persistent desktop frame for the entire product
+- 为整个产品提供持久桌面框架
 
-Must:
+必须：
 
-- preserve stable left navigation plus main workspace structure
-- keep the workspace visually dominant
-- keep shell actions in predictable locations
-- keep shell styling quiet and reusable across pages
+- 保持稳定左侧导航 + 主工作区结构
+- 保持 workspace 视觉主导
+- shell actions 位置可预测
+- shell styling 安静，可跨页面复用
 
-Must not:
+禁止：
 
-- redesign the shell for one feature
-- make the shell feel like a webpage
-- introduce decorative banners or promotional sections into the shell
+- 为单个功能重做 shell
+- 让 shell 看起来像网页
+- 在 shell 里加入装饰 banner 或推广区
 
 ## Sidebar And Navigation
 
-Role:
+作用：
 
-- help users switch between persistent product areas
+- 帮助用户切换持久产品区域
 
-Must:
+必须：
 
-- keep navigation stable and predictable
-- use compact rows with consistent icon size and label rhythm
-- keep grouping clear
-- preserve selected state visibility without heavy visual noise
+- 导航稳定、可预测
+- 使用紧凑 row，保持 icon 尺寸和 label 节奏一致
+- 分组清晰
+- selected state 可见但不喧闹
 
-Must not:
+禁止：
 
-- turn navigation into a card layout
-- move global navigation controls to solve a local page problem
-- use highly decorative icons or badges without functional reason
+- 把导航做成 card layout
+- 为了解决局部页面问题移动全局导航
+- 无功能原因使用装饰性 icon 或 badge
 
 ## Main Workspace
 
-Role:
+作用：
 
-- host the current task and its primary content
+- 承载当前任务和主要内容
 
-Must:
+必须：
 
-- prioritize the current task over surrounding chrome
-- keep one clear primary workflow
-- use whitespace to separate functional regions
-- keep supporting content quieter than the main task
+- 当前任务优先于周围 chrome
+- 保持一个清晰主工作流
+- 用 whitespace 分隔功能区域
+- supporting content 比主任务更安静
 
-Must not:
+禁止：
 
-- fill empty space with decorative filler
-- split one task into too many equally-weighted panels
-- mix unrelated workflows without clear structural separation
+- 用装饰内容填空
+- 把一个任务拆成太多等权重 panel
+- 没有结构分隔地混合无关工作流
 
 ## Input Areas
 
-Role:
+作用：
 
-- support writing, command input, configuration input, or submission
+- 支持写作、命令输入、配置输入或提交
 
-Must:
+必须：
 
-- group related controls by intent
-- keep the main submit or confirm action obvious
-- support both keyboard and pointer use
-- keep helper text short and state-specific
+- 按意图分组相关控件
+- 主提交或确认 action 明显
+- 支持键盘和指针使用
+- helper text 简短且和状态相关
+- 优先复用项目 composer/input 组件
 
-Must not:
+禁止：
 
-- scatter input-related controls across multiple unrelated zones
-- add unnecessary labels where pattern and placement already explain the control
-- resize unpredictably during ordinary typing
+- 把输入相关控件散到多个无关区域
+- 在模式和位置已能解释控件时加多余 label
+- 普通输入时尺寸不可预测地变化
 
 ## Lists And Tables
 
-Role:
+作用：
 
-- present repeatable, scannable objects efficiently
+- 高效呈现可扫描的重复对象
 
-Must:
+必须：
 
-- keep row height and spacing consistent
-- use clear selected, hover, disabled, empty, and loading states
-- keep metadata visually secondary
-- support truncation without destroying scan rhythm
+- row height 和 spacing 一致
+- hover、selected、disabled、empty、loading 状态明确
+- metadata 视觉次级
+- 文本截断不破坏扫描节奏
+- 优先复用已有 list/table primitives
 
-Must not:
+禁止：
 
-- convert dense lists into large cards without a clear content reason
-- mix multiple border grammars in one list
-- rely on color alone for state
+- 无明确内容理由把密集列表改成大卡片
+- 在一个 list 内混用多套 border grammar
+- 只靠颜色表达状态
 
 ## Cards And Content Modules
 
-Role:
+作用：
 
-- group related information, templates, experts, projects, or summaries
+- 分组信息、模板、专家、项目、摘要
 
-Must:
+必须：
 
-- use light borders and restrained framing
-- keep card spacing and radius consistent
-- use cards only when grouping improves comprehension
-- prefer lightweight module presentation similar to the WorkBuddy references
+- 轻边框、克制框架
+- card spacing 和 radius 一致
+- 只有分组能提升理解时才使用 card
+- 优先轻量模块呈现
+- 复用现有 Card 或组件库 Card
 
-Must not:
+禁止：
 
-- make every page section a card by default
-- stack heavy shadows and thick containers
-- nest cards inside cards without a strong structural reason
+- 默认把每个页面 section 都做成 card
+- 叠加重阴影和厚容器
+- 没有强结构理由时 card 套 card
 
 ## Detail Views
 
-Role:
+作用：
 
-- show one record, object, or module in more depth
+- 深入展示一个记录、对象或模块
 
-Must:
+必须：
 
-- establish clear order between title, metadata, main content, and actions
-- keep the content easy to scan
-- preserve strong alignment and spacing rhythm
+- 明确 title、metadata、main content、actions 顺序
+- 内容易扫描
+- alignment 和 spacing rhythm 稳定
 
-Must not:
+禁止：
 
-- scatter actions throughout the page
-- mix unrelated controls into the main reading flow
-- over-decorate the detail surface
+- actions 散落在页面各处
+- 无关控件混入主阅读流
+- 过度装饰 detail surface
 
-## Dialogs, Menus, And Popovers
+## Dialogs, Menus, Popovers
 
-Role:
+作用：
 
-- handle one scoped interaction or secondary task
+- 处理一个范围明确的交互或次级任务
 
-Must:
+必须：
 
-- keep overlays focused
-- use clear titles when needed
-- preserve close, cancel, and destructive semantics
-- match existing border, radius, spacing, and menu rhythm
+- overlay 聚焦
+- 必要时使用清晰标题
+- 保留 close、cancel、destructive 语义
+- 匹配已有 border、radius、spacing、menu rhythm
+- 优先复用项目或组件库 dialog/menu/popover
 
-Must not:
+禁止：
 
-- hold unrelated workflows in one overlay
-- become a substitute for a full page when the task is large
-- contain long explanatory prose that belongs in docs
+- 一个 overlay 塞入无关工作流
+- 用 overlay 替代应该成为页面的大任务
+- 放入本该属于文档的长说明
 
 ## Settings And Forms
 
-Role:
+作用：
 
-- let users configure product behavior predictably
+- 让用户可预测地配置产品行为
 
-Must:
+必须：
 
-- group settings by intent
-- use appropriate control types
-- keep forms scannable and compact
-- keep advanced controls visually secondary
+- 按意图分组 settings
+- 使用合适控件类型
+- forms 紧凑、可扫描
+- advanced controls 视觉次级
+- 优先复用 form/input/select/switch primitives
 
-Must not:
+禁止：
 
-- turn settings into a promotional surface
-- use oversized cards where grouped form rows are enough
-- mix destructive actions into ordinary controls without separation
+- 把 settings 做成推广页
+- grouped form rows 足够时使用过大 card
+- destructive actions 和普通 controls 混在一起
 
 ## Status Feedback
 
-Role:
+作用：
 
-- communicate loading, empty, success, warning, failure, and progress states
+- 传达 loading、empty、success、warning、failure、progress
 
-Must:
+必须：
 
-- keep status messaging short and direct
-- preserve the surrounding module structure during loading and empty states
-- use consistent semantic treatment across pages
+- 状态文案短而直接
+- loading 和 empty 时保持周围模块结构
+- across pages 使用一致 semantic treatment
+- 优先复用 badge、alert、toast、progress primitives
 
-Must not:
+禁止：
 
-- invent a different empty-state style for every module
-- replace useful status text with decorative illustration alone
-- make error states visually louder than necessary
+- 每个模块发明不同 empty-state 风格
+- 用装饰插图替代有用状态文案
+- 让 error state 比必要更喧闹

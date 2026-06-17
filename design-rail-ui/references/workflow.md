@@ -1,245 +1,250 @@
-# UI Change Workflow
+# UI 修改工作流
 
-Follow this workflow for any UI-related change.
+所有 UI 相关修改都必须遵守这个 workflow。
 
-This workflow is mandatory for both developers and coding agents.
+这个文件定义 agent 和用户如何从需求、截图、模糊描述走到明确改法，再进入实现。
 
-## 1. Trigger Conditions
+## 1. 触发条件
 
-This workflow applies whenever a task changes:
+只要任务会改变以下内容，就进入该流程：
 
-- layout
-- spacing
-- typography
-- component styling
-- navigation
-- dialogs, menus, or popovers
-- lists, cards, settings, or other visible modules
-- any renderer-facing interaction surface
+- 布局
+- 间距
+- 字体
+- 组件样式
+- 导航
+- dialog、menu、popover
+- 列表、卡片、设置、表单
+- 截图参考界面
+- 组件库复用或组件替换
+- 任何可见的 renderer-facing surface
 
-UI work must not be treated as a generic coding task.
+UI 工作不能当成普通代码任务处理。
 
-## 2. Read The Design Contract First
+## 2. 先读设计约束
 
-Before editing, read:
+编辑前必须读：
 
 1. `design.md`
 2. `component-rules.md`
 3. `implementation-rules.md`
 
-Do not edit UI first and rationalize the change later.
+不要先改 UI，再事后解释为什么合理。
 
-## 3. Identify The Target Surface
+## 3. 识别目标 surface
 
-Before implementation, identify:
+实现前必须识别：
 
-- the user task supported by the surface
-- the module type being changed
-- the closest existing pattern in the app
-- the visual hierarchy that must remain stable
-- the theme and shell constraints that already exist
+- 这个 surface 支持的用户任务
+- 要改的 module 类型
+- 当前 app 中最接近的已有模式
+- 必须保持稳定的视觉层级
+- 当前 theme、app shell、组件库约束
+- 是否已有可复用组件
 
-If an existing pattern fits, extend that pattern instead of inventing a new one.
+如果已有模式能满足，优先扩展已有模式，不要发明新模式。
 
-## 4. Classify The Change
+## 4. 分类改动
 
-Classify the task before implementation:
+实现前先分类：
 
-- `Small change`: local spacing, copy, alignment, state, or control adjustment
-- `Module change`: meaningful adjustment to one existing module or surface
-- `New module`: new page section, new module, or new interaction pattern
+- `Small change`：局部间距、文案、对齐、状态、控件调整
+- `Module change`：一个已有模块或 surface 的明显调整
+- `New module`：新页面区块、新模块、新交互模式
 
-The larger the change, the more explicit the design direction must be.
+改动越大，设计方向越要明确。
 
-## 5. Run A UI Confirmation Loop
+## 5. UI 确认循环
 
-Before implementation, the agent must confirm the UI direction with the user.
-This is a hard gate.
-The agent must not implement UI changes in the same response that first analyzes screenshots or proposes design direction.
+实现前必须和用户确认 UI 方向。
 
-This is required for:
+这是硬门槛。agent 不能在第一次分析截图或提出设计方向的同一轮里直接改代码。
 
-- all `module changes`
-- all `new modules`
-- any `small change` that affects style, hierarchy, layout, color, typography, or pattern choice
-- any task that includes a current screenshot, reference screenshot, or vague visual feedback
+以下情况必须确认：
 
-This confirmation loop exists to avoid silent UI interpretation drift.
+- 所有 `module changes`
+- 所有 `new modules`
+- 任何影响样式、层级、布局、颜色、字体、模式选择的小改动
+- 任何包含当前截图、参考截图或模糊视觉反馈的任务
+- 任何涉及组件库选择、组件替换、基础控件重写的任务
 
-The agent must not jump from "I understand the task" directly to editing code when design choices are still ambiguous.
-If screenshots or reference images are involved, read them through `screenshot-reading.md` before proposing changes.
+确认循环用于避免 agent 静默解释用户意图并跑偏。
 
-### 5A. Agent Must Return A Structured UI Reading
+如果涉及截图或参考图，必须先读 `screenshot-reading.md`。
 
-Before proposing a change, the agent should describe the task using this structure:
+### 5A. 必须返回结构化 UI Reading
 
-```text
-Current surface:
-Target module:
-Main issues:
-Suggested adjustments:
-Reference direction:
-Reference reading:
-Current mismatch:
-Need your decision on:
-```
-
-Minimum required fields:
-
-- `Current surface`
-- `Target module`
-- `Main issues`
-- `Suggested adjustments`
-
-Use `Reference direction` when relevant:
-
-- pattern family
-- shell family
-- card/list direction
-- cool-white or warm-off-white direction
-- centered-composer or utility-first direction
-
-If a screenshot is involved, the agent must include `Reference reading` when a reference screenshot exists.
-If both the current app screenshot and a reference screenshot exist, the agent must include `Current mismatch`.
-
-Do not skip directly from screenshots to implementation.
-After returning the structured reading, stop and wait for user confirmation.
-
-### 5B. Agent Must Confirm The Following When Relevant
-
-The agent should explicitly confirm:
-
-- `where` the change applies
-- `what` module is being changed
-- `why` the current UI is weak or inconsistent
-- `how` the UI should improve
-- `whether` the user wants the change to stay close to an existing pattern
-- `whether` the user wants a cooler or warmer visual base when color direction matters
-- `whether` the user prefers denser scanning or more open spacing when density matters
-- `whether` the current problem is mainly structure, hierarchy, surface treatment, or density when screenshots are involved
-
-### 5C. Decision Questions Should Stay Focused
-
-The agent should ask only the decisions that matter for the current change.
-
-Good examples:
-
-- keep this card-first, or move closer to a list-first layout?
-- keep the centered composer dominant, or raise utility controls?
-- stay with a cool-white base, or shift toward a warmer off-white base?
-- keep current density, or open the spacing up?
-- align to the existing pattern, or intentionally introduce a new local variation?
-- this looks heavier than the reference mainly because of card framing and loose spacing; do you want me to keep the skeleton and just tighten those two?
-
-Bad examples:
-
-- vague questions like "what do you prefer?"
-- broad aesthetic questions without naming the surface or module
-- asking for color choices when color is not the real issue
-
-### 5D. Do Not Implement Until The Direction Is Clear
-
-If the user has not confirmed the direction, the agent should:
-
-- refine the UI reading
-- narrow the design options
-- ask for the missing decision
-
-Do not implement while the core direction is still ambiguous.
-For screenshot-driven UI tasks, "direction is clear" means the user has confirmed one of the proposed adjustment paths or has explicitly described the desired path using the provided terms.
-General approval like `make it better` is not enough.
-
-### 5E. Required Screenshot Confirmation Pattern
-
-When screenshots are involved, use this sequence:
-
-1. identify the target surface and module
-2. read the reference screenshot using `screenshot-reading.md`
-3. compare the current UI against the reference screenshot
-4. name the likely cause of the mismatch
-5. propose conservative, medium, and strong adjustment paths when appropriate
-6. ask 1-3 focused decision questions
-7. wait for the user's answer
-
-The agent should prefer the smallest confirmed adjustment.
-Do not start implementation until step 7 is complete.
-
-## 6. Write A Design Direction
-
-For small UI changes, write one sentence:
+提出改法前，agent 必须按这个结构描述：
 
 ```text
-Design direction: [what changes], while preserving [existing structure or hierarchy].
+当前 surface（Current surface）:
+目标 module（Target module）:
+主要问题（Main issues）:
+建议调整（Suggested adjustments）:
+参考方向（Reference direction）:
+参考图阅读（Reference reading）:
+当前差异（Current mismatch）:
+组件复用（Component reuse）:
+需要你确认（Need your decision on）:
 ```
 
-For module changes or new modules, define:
+最低必须包含：
+
+- `当前 surface（Current surface）`
+- `目标 module（Target module）`
+- `主要问题（Main issues）`
+- `建议调整（Suggested adjustments）`
+
+当有参考截图时，必须包含 `参考图阅读（Reference reading）`。
+
+当同时有当前 app 截图和参考截图时，必须包含 `当前差异（Current mismatch）`。
+
+当涉及实现时，必须包含 `组件复用（Component reuse）`，说明会优先复用哪些已有组件或组件库 primitives。
+
+输出结构化 reading 后停止，等待用户确认。
+
+### 5B. 必须确认的问题
+
+agent 应明确确认：
+
+- `where`：改哪里
+- `what`：改哪个 module
+- `why`：当前 UI 弱在哪里
+- `how`：计划如何改
+- 是否保持已有模式
+- 色彩方向是否需要冷白、暖白或保持当前 palette
+- 密度是更紧凑还是更开放
+- 当前问题主要是结构、层级、表面处理、密度还是控件语言
+- 组件实现上复用已有组件，还是需要新增/封装组件
+
+### 5C. 决策问题必须聚焦
+
+好的问题：
+
+- 这个区域保持 card-first，还是更接近 list-first？
+- composer 继续做视觉重心，还是提高内容区权重？
+- 保持 cool white base，还是转向 warm off-white base？
+- 当前密度保持，还是收紧一档？
+- 保持现有模式，还是明确引入一个新的局部变化？
+- 这里比参考图更重，主要因为卡片框架和间距偏松；是否保持骨架，只收紧这两项？
+- 这个按钮使用项目已有 Button，还是需要基于组件库封装一个 AppButton？
+
+坏的问题：
+
+- 你喜欢什么风格？
+- 要不要更高级一点？
+- 要不要换个颜色？
+- 不说明 surface 和 module 的开放式审美问题
+
+### 5D. 未确认不能实现
+
+如果用户没有确认方向，agent 必须：
+
+- 继续细化 UI reading
+- 缩小设计选项
+- 问缺失的决策问题
+
+截图驱动任务中，`direction is clear` 的意思是：用户确认了一个改法路径，或使用提供的术语明确说明想要的路径。
+
+`改好看点`、`更现代`、`照着截图改` 不算有效确认。
+
+### 5E. 截图任务固定流程
+
+涉及截图时按这个顺序：
+
+1. 识别目标 surface 和 module
+2. 用 `screenshot-reading.md` 阅读参考截图
+3. 对比当前 UI 和参考截图
+4. 命名差异的可能原因
+5. 给出保守、中等、强改法路径
+6. 提出 1-3 个聚焦决策问题
+7. 等用户回答
+
+默认选择最小的已确认改动。
+
+第 7 步完成前不能开始实现。
+
+## 6. 写设计方向
+
+小改动写一句：
+
+```text
+Design direction: [改什么]，同时保持 [已有结构或层级]。
+```
+
+模块改动或新模块需要定义：
 
 - layout structure
 - module role
-- primary and secondary actions
-- empty, loading, error, and selected states
-- how the change stays consistent with the current product language
+- primary / secondary actions
+- empty、loading、error、selected states
+- 如何保持当前产品语言
+- 组件复用方案
 
-If no existing pattern applies, do not silently invent one. State the proposed direction first.
+没有现成模式可用时，不能静默发明。必须先说明拟定方向。
 
-The design direction should reflect the confirmed UI reading from the previous step.
+## 7. 保守实现
 
-## 7. Implement Conservatively
+实现规则：
 
-Implementation rules:
+- 优先复用已有组件
+- 优先复用已安装组件库
+- 优先复用 tokens 和附近 spacing grammar
+- 改动限制在目标 surface
+- 保持 app shell 稳定
+- 避免一次性整页重做
+- 避免局部 one-off 样式
 
-- reuse existing components first
-- reuse tokens and nearby layout grammar first
-- keep changes scoped to the target surface
-- preserve app shell stability
-- avoid one-off styling when a reusable pattern should exist
+UI 改动应该像当前系统的自然延伸，而不是局部重新设计。
 
-A UI change should feel like an extension of the current system, not a local redesign.
+## 8. 对照产品规则 review
 
-## 8. Review Against Product Rules
-
-Before finishing, check the change against:
+完成前检查：
 
 - `design.md`
 - `component-rules.md`
 - `implementation-rules.md`
 
-Reject the change if it:
+如果出现以下问题，不能认为完成：
 
-- introduces a new local style language
-- breaks shell or hierarchy consistency
-- makes the surface feel more like a webpage or template dashboard than a desktop product
+- 引入新的局部风格语言
+- 打破 shell 或层级一致性
+- surface 看起来更像网页模板或 dashboard 模板
+- 重写了已有基础控件
+- 直接写死本该来自 token 或组件库的样式
 
-## 9. Verify Real States
+## 9. 验证真实状态
 
-Minimum verification:
+最低验证：
 
-- main state
-- empty state
-- loading state
-- error state
-- selected or active state where applicable
-- long Chinese and English text
-- common desktop window sizes
-- dark or light theme expectations for the surface
-- final UI review across skeleton, hierarchy, surface treatment, density, control language, and product consistency
+- 主状态
+- 空态
+- 加载态
+- 错误态
+- selected / active 状态
+- 中英文长文本
+- 常见桌面窗口尺寸
+- 明暗主题预期
+- skeleton、hierarchy、surface treatment、density、control language、product consistency
 
-Passing TypeScript or build checks does not prove UI completion.
+TypeScript 或 build 通过，不代表 UI 完成。
 
-Do not rely on code review alone to claim visual quality.
-The preferred visual verification loop is user-screenshot driven:
+视觉质量不能只靠代码 review 声明。
 
-1. the agent implements the confirmed change
-2. the user opens the app and provides an updated screenshot when visual quality matters
-3. the agent compares the updated screenshot against the confirmed direction and any reference screenshot
-4. the agent proposes the next smallest adjustment if the result still misses the target
+首选视觉验收循环是用户截图驱动：
 
-The agent should not require itself to launch Playwright for normal UI review.
-If no updated screenshot or user visual confirmation is available, mark visual verification as pending user review.
+1. agent 实现已确认改动
+2. 用户打开 app，并在视觉质量重要时提供更新截图
+3. agent 对比更新截图、确认方向和参考截图
+4. 如果仍未达标，agent 提出下一步最小调整
 
-### 9A. Final UI Review Template
+普通 UI review 不要求 agent 默认启动 Playwright。
 
-When finishing a UI change, summarize the result with this structure:
+如果没有更新截图或用户视觉确认，必须标记为 `pending user review`。
+
+### 9A. 最终 UI Review 模板
+
+完成 UI 修改时，用这个结构总结：
 
 ```text
 UI review:
@@ -248,28 +253,29 @@ UI review:
 - Surface treatment:
 - Density:
 - Control language:
+- Component reuse:
 - Product consistency:
 - Visual verification:
 ```
 
-The review should be concrete.
-Do not write generic claims such as `looks cleaner` or `more modern`.
-Name what changed and what product language was preserved.
-For `Visual verification`, use one of:
+`Visual verification` 只能写：
 
 - `confirmed by updated user screenshot`
 - `pending user screenshot review`
 - `pending user visual confirmation`
 
-## 10. Definition Of Done
+不要写泛泛的 `looks cleaner` 或 `more modern`。
 
-A UI task is done only when:
+## 10. 完成定义
 
-- the feature works
-- the target surface still feels like the same product
-- no unnecessary new pattern was introduced
-- code reuse and structure remain reasonable
-- key states were checked
-- the user-facing direction was clear before implementation
+UI 任务完成必须满足：
 
-If the UI works but looks inconsistent with the product language, it is not done.
+- 功能可用
+- 目标 surface 仍然像同一个产品
+- 没有引入不必要的新模式
+- 组件复用和代码结构合理
+- 关键状态已检查
+- 实现前用户已确认方向
+- 视觉验收已确认或明确 pending
+
+如果功能可用但视觉语言不一致，则未完成。

@@ -1,189 +1,220 @@
-# UI Design Contract
+# UI 设计契约
 
-This document is the source-of-truth design contract for app UI work in this repo.
+这是 Design Rail UI 的设计总纲。
 
-Its purpose is not to inspire free-form design. Its purpose is to constrain UI changes so developers and coding agents keep the product visually and structurally consistent over time.
+它不是灵感文档，而是约束文档。目标是让开发者和 coding agent 在长期修改 UI 时保持视觉和结构一致。
 
-Use this document together with:
+配合以下文件使用：
 
 1. `workflow.md`
 2. `component-rules.md`
-3. `ts-react-rules.md`
+3. `implementation-rules.md`
 
-## Purpose
+## 目的
 
-This workflow exists to prevent:
+这个 workflow 用来防止：
 
-- different agents from producing different product styles
-- new modules from inventing new layout paradigms
-- UI changes from drifting into generic dashboard or marketing-page patterns
-- implementation shortcuts from damaging long-term design consistency
+- 不同 agent 做出不同产品风格
+- 新模块随意发明新布局范式
+- UI 漂移成通用 dashboard 或营销页
+- 为了快速实现而破坏长期设计一致性
+- 在已有组件库时仍然手写一套控件语言
 
-If a change improves functionality but noticeably breaks the product's visual language, it is not complete.
+如果一个改动功能可用，但明显破坏产品视觉语言，则不能算完成。
 
-## Reference Style
+## 参考风格
 
-The current v1 reference set combines two sources:
+当前 v1 参考方向来自几类产品截图：
 
-1. `Primary reference: Codex desktop app screenshots`
-2. `Secondary reference: WorkBuddy light-theme screenshots`
+- Codex 桌面 app 截图
+- WorkBuddy light-theme 截图
+- YouMind / Manus 等 AI 工作台和知识工作流界面
 
-These references define the product language at a structural level. They are not a requirement to copy exact colors pixel-for-pixel.
+这些参考定义的是结构层面的产品语言，不要求逐像素复制颜色。
 
-What is fixed:
+固定部分：
 
-- desktop workbench structure
-- stable left navigation plus main workspace layout
-- restrained panel styling
-- calm information hierarchy
-- compact but readable control density
-- low-contrast surfaces and light borders
-- consistent menu, popover, settings, and list behavior
+- 桌面工作台结构
+- 稳定左侧导航 + 主工作区
+- 克制的 panel styling
+- 冷静的信息层级
+- 紧凑但可读的控件密度
+- 低对比 surface 和轻边框
+- 一致的 menu、popover、settings、list 行为
 
-What is flexible:
+可变部分：
 
-- exact color palette
-- dark or light theme choice for a specific surface
-- product-specific icons, illustrations, and copy
+- 具体色盘
+- 明暗主题选择
+- 产品自有图标、插图、文案
+- 项目具体组件库
 
-## Product Character
+## 产品气质
 
-The UI should feel:
+UI 应该感觉：
 
-- calm
-- structured
-- tool-like
-- desktop-first
-- reliable
-- low-drama
-- precise
+- 冷静
+- 结构化
+- 工具化
+- 桌面优先
+- 可靠
+- 克制
+- 精确
 
-The UI should not feel:
+UI 不应该感觉：
 
-- promotional
-- playful for its own sake
-- heavily decorative
-- trend-driven
-- card-heavy by default
-- visually loud
+- 营销化
+- 为了可爱而可爱
+- 装饰过重
+- 追逐潮流
+- 默认卡片堆叠
+- 视觉喧闹
 
-## Product Language
+## 产品语言
 
-The current v1 visual language should favor:
+v1 视觉语言应偏向：
 
-- stable navigation
-- broad primary work areas
-- restrained module framing
-- compact but comfortable controls
-- lightweight cards, menus, and popovers
+- 稳定导航
+- 宽阔主工作区
+- 克制模块框架
+- 紧凑但舒适的控件
+- 轻量 card、menu、popover
 
-This is a productivity-oriented UI, not a sparse brand page and not a generic dashboard template.
+这是生产力工具，不是品牌落地页，也不是通用 dashboard 模板。
 
-## Layout Language
+## 布局语言
 
-The product should preserve a stable app shell:
+保持稳定 app shell：
 
-- left navigation is persistent and predictable
-- the main workspace is visually dominant
-- secondary panels support the task rather than compete with it
-- dialogs, popovers, and menus stay scoped and task-specific
+- 左侧导航持久、可预测
+- 主工作区视觉主导
+- 次级 panel 支持任务，不抢任务焦点
+- dialog、popover、menu 保持任务范围内
 
-Changes should preserve the existing relationship between:
+修改必须保持以下关系：
 
 - navigation
 - workspace
 - contextual controls
 - overlays
 
-Do not introduce a new layout grammar for one page unless it is first approved as a new reusable pattern.
+不要为了一个页面引入新的布局语法，除非用户先确认它会成为可复用模式。
 
-## Surface Language
+## Surface 语言
 
-Surfaces should be:
+surface 应该：
 
-- lightly separated
-- rounded but not soft or playful
-- bordered subtly rather than heavily shadowed
-- consistent in spacing and internal rhythm
+- 轻分隔
+- 圆角克制
+- 用轻边框而不是重阴影
+- 间距和内部节奏一致
 
-The preferred visual tools for hierarchy are:
+层级优先通过以下方式表达：
 
 - spacing
 - typography
 - alignment
 - quiet borders
-- surface elevation only where necessary
+- 必要时的 subtle surface shifts
 
-Do not rely on:
+不要依赖：
 
-- loud gradients
-- large saturated fills
-- oversized shadows
-- decorative illustrations used only to fill space
+- 大面积强渐变
+- 高饱和填充
+- 夸张阴影
+- 只为填空而出现的装饰插图
 
-Use hierarchy through:
+## 字体和密度
 
-- spacing
-- alignment
-- type scale
-- muted borders
-- subtle surface shifts
+字体服务于扫描和长时间工作。
 
-## Typography And Density
+应该：
 
-Typography should support scanning and work sessions.
+- 标题紧凑、有用
+- label 简短
+- 次级信息使用 muted text
+- 信息密度适合工具使用
 
-Do:
+不应该：
 
-- keep headings compact and useful
-- keep labels short
-- use muted text for secondary metadata
-- keep information density high enough for tool usage
+- 在工具界面使用营销页 hero 标题
+- 做大块空白但信息很少
+- 让 utility controls 过大
+- 把说明文案写成长段 UI copy
 
-Do not:
+## 颜色策略
 
-- use hero-style marketing headings in tool surfaces
-- create large empty blocks with too little useful information
-- make utility controls feel oversized
-- turn explanations into long blocks of UI copy
+颜色不是这个系统的主要身份锚点。
 
-## Color Strategy
-
-Color is not the primary identity anchor for this system.
-
-Use color to support:
+颜色用于支持：
 
 - action priority
 - selected state
 - semantic status
 - subtle product tone
 
-Do not use color to compensate for weak structure.
+不要用颜色弥补结构问题。
 
-Changing a palette is acceptable. Changing the structural language is not.
+改变 palette 可以，改变结构语言不可以。
 
-## Motion
+## 组件库策略
 
-Motion should clarify state, not perform personality.
+组件库是控件层约束，不是整体页面设计。
 
-Allowed by default:
+组件库可以统一：
+
+- Button
+- Input
+- Select
+- Tabs
+- Modal / Dialog
+- Dropdown
+- Tooltip
+- Card
+- Badge
+- Switch / Checkbox
+- Table / List primitives
+
+组件库不能替代：
+
+- 页面骨架
+- 信息层级
+- 视觉重心
+- 模块密度
+- 产品气质
+- 截图差异判断
+
+因此，使用组件库时仍必须遵守 Design Rail workflow。
+
+项目已有组件库时：
+
+- 优先复用项目已有组件
+- 不直接重写基础控件
+- 不绕过 theme token 写死局部样式
+- 新增组件库必须先得到用户确认
+
+## 动效
+
+动效用于说明状态，不用于表演个性。
+
+默认允许：
 
 - subtle hover feedback
-- open or close transitions
-- loading and progress communication
-- scoped expand or collapse transitions
+- open / close transition
+- loading / progress communication
+- scoped expand / collapse
 
-Disallowed by default:
+默认禁止：
 
-- looping decorative animation
-- moving backgrounds
-- exaggerated entrance choreography
+- 循环装饰动画
+- 会移动的背景
+- 夸张入场动画
 
-## Using Screenshot References
+## 使用截图参考
 
-When screenshots are provided, use them to extract constraints rather than copy them blindly.
+有截图时，从截图中提取约束，不盲目复制。
 
-Extract:
+提取：
 
 - app type
 - layout structure
@@ -192,50 +223,34 @@ Extract:
 - text hierarchy
 - interaction model
 - theme behavior
+- control language
 
-Do not extract:
+不要提取：
 
-- product-specific branding that does not belong to this app
-- unrelated copy
-- platform-specific window chrome unless the task explicitly needs it
+- 不属于本产品的品牌
+- 无关文案
+- 平台窗口 chrome，除非任务明确需要
 
-When adapting a screenshot, define a short direction in this form:
+适配截图时，用这种方向说明：
 
 ```text
-Use the reference for [layout / density / surface / control behavior], adapted to the existing app structure. Preserve [existing hierarchy / data flow / module pattern]. Avoid [non-matching patterns].
+使用参考图的 [layout / density / surface / control behavior]，
+适配到当前 app 结构。
+保持 [existing hierarchy / data flow / module pattern]。
+避免 [non-matching patterns]。
 ```
 
-The goal is to make the result feel like the same product, not an imported screenshot.
+目标是让结果像同一个产品，而不是导入一张截图。
 
-## Hard Prohibitions
+## 硬禁止
 
-The following patterns are not allowed unless explicitly approved:
+除非用户明确批准，禁止：
 
-- marketing-page hero layouts inside the app
-- decorative dashboard card grids used as filler
-- introducing a new navigation model for one feature
-- turning dense lists into large promo-style cards without functional need
-- adding glow, glassmorphism, neon, or ornamental gradients as default style
-- creating one-off control styles that do not match nearby surfaces
-- adding extra visual complexity just to make a page feel "modern"
-
-## Agent Usage Contract
-
-Any agent working on UI must:
-
-1. read this document before editing UI
-2. identify the target surface in `component-rules.md`
-3. follow `workflow.md` before implementing
-4. obey `ts-react-rules.md` for code structure and reuse
-
-If an agent cannot find a matching pattern, it must propose a short design direction before implementation instead of inventing a new UI style silently.
-
-## Acceptance Standard
-
-A UI change is acceptable when:
-
-- it still feels like the same product
-- it preserves the main task hierarchy
-- it reuses existing surface language
-- it does not introduce a new local design system
-- it remains coherent in main, empty, loading, error, and selected states
+- 在 app 内做营销页 hero layout
+- 用装饰 dashboard card grid 填空间
+- 为一个功能引入新的导航模型
+- 把密集列表改成大 promo card
+- 默认使用 glow、glassmorphism、neon、ornamental gradients
+- 创造不匹配附近 surface 的 one-off 控件样式
+- 为了“现代感”增加额外复杂度
+- 项目已有组件库时重写基础控件

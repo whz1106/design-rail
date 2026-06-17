@@ -1,488 +1,367 @@
-# UI Glossary
+# UI 通用术语表
 
-This glossary turns the current reference screenshots into a shared design language for humans and coding agents.
+这个 glossary 把参考截图和常见 AI app 页面转成可复用设计语言。
 
-Goal:
+它不是完整 design system，而是帮助人和 agent 讨论：
 
-- help humans describe UI changes without relying only on screenshots
-- help agents map requests to stable module and layout terms
-- reduce vague language like "make it cleaner" or "more advanced"
+- 页面类型
+- 页面骨架
+- 模块组织
+- 视觉差异
+- 控件语言
+- 组件复用
 
-Use this glossary with:
+## 使用原则
 
-1. `DESIGN.md`
-2. `workflow.md`
-3. `component-rules.md`
+优先使用中英文混合术语。
 
-## How To Use
+中文帮助团队沟通，英文帮助 agent 和代码语境对齐。
 
-When discussing a UI task, try to describe it with:
-
-1. `surface type`
-2. `structure terms`
-3. `visual traits`
-4. `interaction traits`
-5. `do / avoid guidance`
-
-Example:
+示例：
 
 ```text
-This should stay a project workspace surface inside the existing app shell.
-Keep the persistent left navigation and broad primary workspace.
-Use lightweight module cards, low-contrast borders, and a quiet utility row.
-Avoid turning it into a promotional dashboard or a heavy card grid.
+这个 assistant home surface 的 composer 视觉权重偏弱。
+建议保持 sidebar + workspace skeleton，只减轻 card weight，并收紧 density。
 ```
 
-## 1. Product-Level Terms
+## Surface Families
 
-- `桌面 AI 工作台（desktop AI workbench）`
-  - A desktop-first AI product with stable navigation, persistent tools, and task-oriented work areas.
+### `centered home workspace`
 
-- `代理协作工作区（agent-assisted workspace）`
-  - A workspace where the user coordinates tasks, tools, knowledge, or automation with AI assistance.
+适合：
 
-- `本地推理工作台（local inference workbench）`
-  - A workbench-style app that includes local model execution, runtime controls, and model management surfaces.
+- AI 助手首页
+- chatbot 首页
+- 新任务入口
+- 空态工作台
 
-- `工具型产品界面（tool-like product surface）`
-  - A product surface focused on getting work done rather than telling a story or promoting a feature.
+典型结构：
 
-## 2. Surface Vocabulary
-
-These terms answer: `这是什么页面 / 模块？`
-
-### Core Shell Surfaces
-
-- `应用外壳（app shell）`
-  - The persistent outer product frame: left navigation, global actions, main content container, overlays.
-  - Seen strongly in both Codex and WorkBuddy.
-
-- `左侧导航区（left navigation）`
-  - The persistent left-side area for switching core product sections.
-
-- `主工作区（primary workspace）`
-  - The visually dominant area where the current task happens.
-
-- `上下文面板（context panel）`
-  - A secondary region for related information, settings, status, or detail without replacing the main task area.
-
-- `详情面板（detail panel）`
-  - A focused detail surface for a selected object, task, or item.
-
-### Home And Task Surfaces
-
-- `助手首页（assistant home surface）`
-  - A home workspace centered around the main AI interaction entry point.
-  - WorkBuddy home is a clear example.
-
-- `项目工作区（project workspace）`
-  - A workspace surface for project-level actions, lists, templates, and summaries.
-
-- `项目列表页（project list surface）`
-  - A page for scanning available projects with lightweight metadata and actions.
-
-- `自动化页面（automation surface）`
-  - A surface for listing, configuring, or launching automations, templates, and recurring tasks.
-
-- `专家目录页（expert directory surface）`
-  - A discovery page for agents, experts, roles, or skill-based profiles presented as scannable content modules.
-
-- `模板库页面（template gallery surface）`
-  - A page presenting reusable task templates, usually in card or module form.
-
-### Utility Surfaces
-
-- `设置界面（settings surface）`
-  - A structured configuration surface with grouped preferences and low-noise form patterns.
-
-- `插件 / 技能目录（plugin or skill directory surface）`
-  - A searchable listing surface for extensions, tools, or skills.
-  - Codex plugin and skill screens are clear references.
-
-- `账户菜单（account menu）`
-  - A small personal menu for account, usage, settings, logout, and related actions.
-
-- `筛选浮层（filter popover）`
-  - A compact overlay used for status, date, or category filtering without leaving the current page.
-
-- `操作菜单（action menu / dropdown menu）`
-  - A scoped overlay listing a small set of contextual actions.
-
-### Local Inference Surfaces
-
-- `模型管理页（model management surface）`
-  - A surface for browsing, selecting, enabling, or removing models.
-
-- `本地推理控制面板（local inference control panel）`
-  - A settings or workspace panel for inference mode, runtime, temperature, context length, and execution options.
-
-- `运行时状态面板（runtime status panel）`
-  - A small status module showing runtime state, availability, memory, or execution readiness.
-
-- `推理参数区（inference parameter panel）`
-  - A grouped control area for inference parameters and execution behavior.
-
-- `执行日志区（execution log surface）`
-  - A scannable log surface for model events, task execution, or runtime diagnostics.
-
-## 3. Structure Vocabulary
-
-These terms answer: `这个页面怎么搭起来的？`
-
-### Shell And Layout
-
-- `稳定应用骨架（stable app shell structure）`
-  - A repeated product frame that should not change between pages.
-
-- `左导航 + 主内容布局（left-navigation plus main-workspace layout）`
-  - A dominant layout pattern for many desktop AI workbench products.
-
-- `宽主画布（broad primary canvas）`
-  - A wide, open main content area with clear task priority.
-
-- `面板式布局（panel-based layout）`
-  - A layout built from clear surfaces and grouped panels rather than free-floating content.
-
-- `工作区优先布局（workspace-first layout）`
-  - A layout where the core task area is more visually important than supporting chrome.
-
-- `标题 + 操作区页头（title-and-actions header）`
-  - A page header composed of title, short supporting copy, and one or two clear actions.
-
-- `搜索与筛选工具行（search-and-filter utility row）`
-  - A compact row containing search, filter, sorting, or view controls.
-
-### Content Structures
-
-- `轻量卡片栅格（lightweight card grid）`
-  - A grid of visually restrained content cards, not a marketing bento grid.
-
-- `模块卡片区（module card section）`
-  - A grouped area containing reusable content modules, templates, or expert cards.
-
-- `列表优先布局（list-first layout）`
-  - A structure optimized for scanning repeated items quickly.
-
-- `单列详情流（single-column detail flow）`
-  - A detail page with strong vertical reading order rather than many competing panels.
-
-- `分组内容区（grouped content regions）`
-  - Separate content sections with clear spacing and headings, without reinventing the page shell.
-
-### Overlay Structures
-
-- `局部浮层（scoped overlay）`
-  - An overlay attached to a specific local task, such as filtering or choosing a source.
-
-- `轻量下拉菜单（lightweight dropdown menu）`
-  - A compact vertical menu with quiet separators, mild radius, and simple icon-text rows.
-
-- `分段筛选菜单（sectioned filter popover）`
-  - A popover with grouped filter categories such as state and time range.
-
-## 4. Visual Vocabulary
-
-These terms answer: `它看起来像什么？`
-
-### High-Level Product Style
-
-- `桌面工作台气质（desktop workbench feel）`
-  - Calm, stable, utility-first, non-promotional.
-
-- `低干扰界面（low-noise interface）`
-  - An interface that avoids decorative visual clutter and keeps task focus high.
-
-- `非营销化表面（non-promotional product surface）`
-  - A product surface that does not look like a landing page or campaign page.
-
-- `克制的产品界面（restrained product UI）`
-  - A UI with controlled styling, no unnecessary flourish, and clear task hierarchy.
-
-### Surface And Framing
-
-- `低对比表面分层（low-contrast surface layering）`
-  - Hierarchy created with subtle surface shifts rather than strong color blocks.
-
-- `克制的面板包裹（restrained panel framing）`
-  - Panels and cards are present but quiet, with subtle edges and controlled emphasis.
-
-- `轻边框层级（muted border hierarchy）`
-  - Borders help structure content without becoming decorative.
-
-- `轻量模块卡片（lightweight module cards）`
-  - Cards with soft radius, light border, low visual weight, and clear scanning purpose.
-
-- `柔和圆角（soft radius treatment）`
-  - Rounded corners that feel polished but not playful or bubbly.
-
-- `开阔内容画布（spacious content canvas）`
-  - Broad content areas with enough whitespace to separate functionally distinct modules.
-
-### Density And Rhythm
-
-- `紧凑控件密度（compact control density）`
-  - Controls are space-efficient and productivity-oriented.
-
-- `舒适扫描节奏（comfortable scanning rhythm）`
-  - Repeated items are easy to scan due to steady spacing, predictable metadata placement, and low-noise structure.
-
-- `安静的导航样式（quiet navigation styling）`
-  - The navigation is visually present but does not compete with the main task area.
-
-- `轻量内容呈现（lightweight content presentation）`
-  - Information modules feel product-like and useful, not decorative and over-framed.
-
-## 5. Interaction Vocabulary
-
-These terms answer: `它是怎么被使用的？`
-
-- `持久导航（persistent navigation）`
-  - Main product navigation remains stable across surfaces.
-
-- `单一主操作流（single-primary-action flow）`
-  - Each major surface has one obvious next action instead of many equally loud options.
-
-- `渐进式信息展开（progressive disclosure）`
-  - Secondary information or filters appear only when needed rather than all at once.
-
-- `局部次要操作（inline secondary actions）`
-  - Secondary actions remain close to the related content without disrupting the main layout.
-
-- `稳定操作位置（stable action placement）`
-  - Similar actions appear in predictable places across different pages.
-
-- `搜索优先发现（search-first discovery）`
-  - Search is a first-class discovery mechanism for large sets of items.
-
-- `筛选浮层交互（filter-popover interaction）`
-  - Filtering happens in a compact overlay rather than a full page settings experience.
-
-- `选择驱动详情（selection-driven detail flow）`
-  - Selecting an item reveals or changes details elsewhere, without rebuilding the entire page.
-
-- `工作区中心交互（workspace-centric interaction）`
-  - The user spends most time in the main task area; all other surfaces support that core flow.
-
-### Local Inference Interaction Terms
-
-- `参数驱动执行（parameter-driven execution）`
-  - The user adjusts execution behavior through grouped controls before or during model use.
-
-- `运行时感知控制（runtime-aware controls）`
-  - Controls reflect whether a runtime or model is available, busy, or missing.
-
-- `本地模型选择流程（local model selection flow）`
-  - A user flow for choosing the active local model before execution.
-
-- `资源敏感交互（resource-sensitive interaction）`
-  - The UI makes compute or memory state visible enough to guide behavior.
-
-## 6. Reference-Derived Pattern Notes
-
-This section captures reusable pattern families derived from the current references without binding the glossary to any single product.
-
-### Shell And Navigation Family
-
-Primary traits:
-
-- stable app shell
 - quiet left navigation
-- clear main workspace priority
-- restrained settings and utility surfaces
+- broad workspace container
+- centered composer
+- action chips
+- light utility indicators
 
-Useful for describing:
+常见问题：
 
-- desktop AI workbench shells
-- settings framing
-- scoped menus and overlays
+- composer 不够主导
+- action chips 过多抢焦点
+- 空白太大但没有节奏
+- sidebar promo card 太重
 
-### Centered Home Workspace Family
+### `project browsing workspace`
 
-Primary traits:
+适合：
 
-- centered task-entry surface
-- broad open workspace
-- dominant composer
-- lightweight supporting actions
+- 项目列表
+- 最近任务
+- 资产浏览
 
-Useful for describing:
+典型结构：
 
-- assistant home surfaces
-- task-entry pages
-- broad light-theme workspaces
+- page header
+- recent row
+- view controls
+- project card grid
+- secondary metadata
 
-### Capability Catalog Family
+常见问题：
 
-Primary traits:
+- card grid 过重
+- metadata 抢主标题
+- 最近区域和主列表层级不清
 
-- searchable directory layout
-- connector or plugin sections
-- lightweight install/add actions
-- scan-first information density
+### `capability discovery workspace`
 
-Useful for describing:
+适合：
 
-- plugin directories
-- connector catalogs
-- skill discovery pages
+- 技能发现
+- 专家列表
+- 模板市场
+- 能力浏览
 
-### Project And Library Family
+典型结构：
 
-Primary traits:
+- page header
+- category switcher
+- featured section
+- skill grid
+- create action
 
-- recent rows or recent carousels
-- card-first or mixed card/list browsing
-- search and filter utility rows
-- broad content canvas with calm grouping
+常见问题：
 
-Useful for describing:
+- 过于营销页
+- featured cards 太大
+- category 和 grid 控件语言不一致
 
-- project dashboards
-- library surfaces
-- document browsing pages
+### `capability catalog workspace`
 
-### Automation Onboarding Family
+适合：
 
-Primary traits:
+- 插件目录
+- connector catalog
+- 集成服务列表
 
-- explanatory hero block
-- simple automation entry rows
-- one strong creation action
-- low-noise instructional layout
+典型结构：
 
-Useful for describing:
+- page header
+- search field
+- connector sections
+- connector cards
+- section-level actions
 
-- scheduled task surfaces
-- workflow setup pages
-- recurring automation entry points
+常见问题：
 
-### Neutral Color Families
+- connector card 像广告卡片
+- search/filter row 过重
+- section 之间分隔不稳定
 
-#### Cool White Family
+### `settings analytics workspace`
 
-- `主背景（primary canvas）`
-  - around `#ffffff`
+适合：
 
-- `次级表面（secondary surface）`
-  - around `#f7f7f7`
+- 设置页
+- 账号页
+- 订阅和用量页
 
-- `文本主色（primary text tone）`
-  - around `#000000` to `#080808`
+典型结构：
 
-- `边界与分割（divider and border tone）`
-  - around `#d2d2d2` to `#d4d4d4`
+- settings navigation
+- profile block
+- plan card
+- usage chart
+- settings section blocks
 
-Color reading:
+常见问题：
 
-- cooler, cleaner, and more whitespace-driven
-- better for calm, open, low-drama workspaces
+- settings 被做成宣传页
+- plan card 抢过多注意力
+- form rows 不够可扫描
 
-#### Warm Off-White Family
+### `library browsing workspace`
 
-- `主背景（primary canvas）`
-  - around `#f8f8f7`
+适合：
 
-- `次级表面（secondary surface）`
-  - around `#ebebeb`
+- 资料库
+- 文件管理
+- 文档浏览
+- 生成物资产页
 
-- `高亮白卡片（highlight card white）`
-  - around `#ffffff`
+典型结构：
 
-- `文本主色（primary text tone）`
-  - around `#000000` to `#0d0d0d`
+- page header
+- filter controls
+- search row
+- view toggle
+- document cards / list items
 
-- `边界与分割（divider and border tone）`
-  - around `#d8d8d7` to `#dddddc`
+常见问题：
 
-Color reading:
+- document cards 太重
+- density 太松
+- search/filter 和内容区不成体系
 
-- slightly warmer, softer, and more operational
-- better for utility-heavy pages and capability surfaces
+## Layout Terms
 
-## 7. Do / Avoid Language
+- `app shell`
+  - 稳定外壳，通常包含导航和主工作区。
 
-These phrases are suitable for real human-agent discussion.
+- `sidebar + workspace`
+  - 左侧导航或侧栏 + 主工作区结构。
 
-### Useful "Do" Phrases
+- `centered composition`
+  - 主要内容居中，常见于 assistant home。
 
-- 保持现有应用外壳（Preserve the existing app shell）
-- 保持左侧导航稳定（Keep the left navigation stable）
-- 让主工作区继续占主导（Keep the primary workspace visually dominant）
-- 使用轻量模块卡片（Use lightweight module cards）
-- 保持中心输入入口清晰（Keep the centered composer clearly dominant）
-- 保持低对比表面分层（Keep low-contrast surface layering）
-- 使用搜索与筛选工具行（Use a search-and-filter utility row）
-- 使用连接器目录模式组织外部能力（Use connector-catalog patterns for external capabilities）
-- 把次要操作做成局部浮层（Move secondary actions into a scoped overlay）
-- 保持紧凑控件密度（Maintain compact control density）
-- 用分组内容区组织页面（Organize the page into grouped content regions）
+- `split workspace`
+  - 主工作区被拆成两个主要 panel。
 
-### Useful "Avoid" Phrases
+- `context sidebar`
+  - 跟当前任务相关的侧栏。
 
-- 不要把这个页面做成营销页（Do not turn this into a marketing-style page）
-- 不要重新发明导航结构（Do not reinvent the navigation model）
-- 不要把列表改成重卡片网格（Do not turn this list into a heavy card grid）
-- 不要让 action chips 抢输入区焦点（Do not let action chips compete with the main composer）
-- 不要为了现代感加入夸张装饰（Do not add exaggerated decoration just to feel modern）
-- 不要让次级信息抢主任务焦点（Do not let secondary content compete with the primary task）
-- 不要引入新的局部设计系统（Do not introduce a new local design system）
+- `workspace container`
+  - 主工作区容器。
 
-## 8. Human-Agent Prompt Fragments
+- `visual center`
+  - 用户第一眼关注的核心位置。
 
-These are ready-to-use phrases for future UI conversations.
+- `primary workflow`
+  - 当前页面最重要的操作路径。
 
-### Shell And Workspace
+## Surface Treatment Terms
 
-- 这个页面应该保持在现有 `应用外壳（app shell）` 内，不要改导航范式。
-- 把内容放在 `主工作区（primary workspace）`，不要让辅助信息抢焦点。
-- 继续使用 `左导航 + 主工作区布局（left-navigation plus main-workspace layout）`。
+- `flat surface`
+  - 几乎不使用 card 边框，靠间距和对齐表达结构。
 
-### Lists, Cards, And Modules
+- `light card`
+  - 轻边框、低对比、少阴影的卡片。
 
-- 这里更适合做成 `轻量模块卡片（lightweight module cards）`，不是营销式大卡片。
-- 这个 surface 应该保持 `舒适扫描节奏（comfortable scanning rhythm）`。
-- 用 `分组内容区（grouped content regions）` 组织，不要堆砌容器。
-- 这里更像 `连接器目录页（connector catalog surface）`，应该优先强调搜索、扫描和加装动作。
-- 这里更像 `技能发现页（skill discovery surface）`，卡片可以轻一点，但不要失去分类和精选层级。
+- `heavy card`
+  - 强边框、强填充、明显阴影或过大留白的卡片。
 
-### Utility And Overlays
+- `panel-like`
+  - 更像工作区 panel，而不是内容卡片。
 
-- 把筛选做成 `筛选浮层（filter popover）`，不要单独开整页设置。
-- 次要操作放在 `局部浮层（scoped overlay）` 或行内次要操作里。
-- 保持 `稳定操作位置（stable action placement）`。
-- 如果这是 `定时任务页（scheduled task surface）`，优先用解释型入口行，不要直接堆很多复杂表单。
-- 如果这是 `资料库页（library surface）`，优先保留 `搜索与筛选工具行（search-and-filter utility row）` 和视图切换。
+- `overlay-like`
+  - 具有浮层感，通常用于 dialog、popover。
 
-### Local Inference Extensions
+- `border-led`
+  - 主要靠边框表达边界。
 
-- 这里可以新增一个 `本地推理控制面板（local inference control panel）`，但仍然要留在同一套 app shell 里。
-- 模型选择应当是 `本地模型选择流程（local model selection flow）`，不要单独发明一套新布局。
-- 状态展示更适合 `运行时状态面板（runtime status panel）`，而不是大面积装饰模块。
+- `fill-led`
+  - 主要靠背景填充表达边界。
 
-## 9. Recommended Core Terms
+## Density Terms
 
-If you only remember a smaller set, start with these:
+- `compact`
+  - 紧凑，适合工具和列表扫描。
 
-- 应用外壳（app shell）
-- 左侧导航（left navigation）
-- 主工作区（primary workspace）
-- 设置界面（settings surface）
-- 项目工作区（project workspace）
-- 助手首页（assistant home surface）
-- 技能发现页（skill discovery surface）
-- 插件目录页（plugin directory surface）
-- 连接器目录页（connector catalog surface）
-- 定时任务页（scheduled task surface）
-- 资料库页（library surface）
-- 专家目录页（expert directory surface）
-- 自动化页面（automation surface）
-- 轻量模块卡片（lightweight module cards）
-- 中心输入入口（centered composer）
-- 快捷动作胶囊（action chips）
-- 低对比表面分层（low-contrast surface layering）
-- 克制的面板包裹（restrained panel framing）
-- 紧凑控件密度（compact control density）
-- 渐进式信息展开（progressive disclosure）
-- 局部浮层（scoped overlay）
-- 稳定操作位置（stable action placement）
-- 本地推理控制面板（local inference control panel）
+- `balanced`
+  - 平衡，适合多数工作台 UI。
+
+- `open`
+  - 留白更大，适合入口页或低信息量状态。
+
+- `scan-dense`
+  - 信息密度较高，但仍可扫描。
+
+- `scan-loose`
+  - 扫描节奏偏松，可能显得空。
+
+## Control Language Terms
+
+- `restrained controls`
+  - 克制控件，低噪声、不过分装饰。
+
+- `rounded restrained`
+  - 圆角存在但不过软。
+
+- `border quiet`
+  - 边框存在但不抢视觉。
+
+- `primary action restrained`
+  - 主按钮可见但不喧闹。
+
+- `input presence strong`
+  - 输入区视觉权重强。
+
+- `input presence quiet`
+  - 输入区更安静。
+
+## Component Terms
+
+- `component primitive`
+  - Button、Input、Tabs、Dialog 等基础控件。
+
+- `project component`
+  - 项目内已有封装组件，通常带产品默认样式。
+
+- `thin wrapper`
+  - 对组件库 primitive 做轻封装，固定默认 props 和 token。
+
+- `component entrypoint`
+  - 项目组件入口，如 `components/ui`。
+
+- `component mapping`
+  - 把目标 UI 模块映射到已有组件，例如 composer -> AppInput + Button + Dropdown。
+
+- `raw HTML recreation`
+  - 已有组件可用时仍手写 div/button/input，默认不允许。
+
+## Visual Issues
+
+- `card weight too heavy`
+  - 卡片边框、背景、阴影或 spacing 过重。
+
+- `border presence too strong`
+  - 边框比层级需要更明显。
+
+- `hierarchy scattered`
+  - 主次关系发散。
+
+- `weak visual center`
+  - 缺少清晰视觉重心。
+
+- `scan rhythm too loose`
+  - 间距过松，不利于工具使用。
+
+- `control language inconsistent`
+  - 控件不像同一套系统。
+
+- `local web-page feel`
+  - 局部像网页模板，不像 app。
+
+- `component reuse insufficient`
+  - 没有充分复用已有组件或组件库。
+
+## Adjustment Verbs
+
+- `减轻（soften）`
+  - 降低边框、填充、阴影或视觉重量。
+
+- `收紧（tighten）`
+  - 减少松散 spacing，提高扫描节奏。
+
+- `弱化（de-emphasize）`
+  - 降低次级内容或 action 的存在感。
+
+- `提高权重（raise prominence）`
+  - 提高主模块、主输入或主 action 的视觉优先级。
+
+- `对齐（align）`
+  - 让模块或控件和已有系统一致。
+
+- `复用（reuse）`
+  - 使用已有组件、组件库 primitive 或 token。
+
+- `封装（wrap）`
+  - 基于已有 primitive 做轻量 wrapper。
+
+## 推荐表达
+
+用户可以说：
+
+```text
+这个 settings surface 的 plan card 太重。
+我想保持当前骨架，只减轻 card weight 和 border presence。
+组件实现上优先复用现有 Card 和 Button。
+```
+
+agent 应回复：
+
+```text
+当前 surface（Current surface）: settings surface
+目标 module（Target module）: plan card
+观察到的问题（Observed issues）:
+- card weight too heavy
+- border presence too strong
+
+建议改法（Proposed improvements）:
+- reduce card weight
+- quiet borders
+- keep current skeleton
+
+组件复用（Component reuse）:
+- reuse existing Card and Button if available
+
+需要你确认（Need your decision on）:
+1. keep light-card, or move flatter?
+2. tighten density one step, or keep current spacing?
+```
+
+## 禁止表达
+
+不要只说：
+
+- `做得高级一点`
+- `照着参考图`
+- `优化 UI`
+- `随便改好看点`
+
+agent 也不能只回复：
+
+- `我会优化样式`
+- `我会让它更现代`
+- `我会参考截图实现`
+
+必须把反馈翻译成具体 surface、module、issue、adjustment、decision。

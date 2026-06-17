@@ -1,43 +1,35 @@
 ---
 name: design-rail-ui
-description: Use when a task changes app UI, visible components, layout, styling, navigation, dialogs, cards, settings, lists, forms, color, typography, screenshot-referenced interfaces, or other renderer-facing surfaces in ways that could affect product consistency.
+description: 用于会影响产品一致性的前端 UI 任务，包括 app 界面、可见组件、布局、样式、导航、弹窗、卡片、设置、列表、表单、颜色、字体、截图参考界面、组件库复用和其他 renderer-facing surface。
 ---
 
 # Design Rail UI
 
-This skill provides a reusable UI governance workflow for app UI work.
+Design Rail UI 是一套给 coding agent 和开发者共用的前端 UI 工作流。
 
-The goal is not maximum design freedom.
-The goal is to keep product UI consistent while making agent-user UI discussions concrete and efficient.
+它的目标不是让 agent 自由发挥设计，而是让 UI 修改保持同一套产品语言：先读图，先确认，再按最小范围实现。
 
-## When To Use
+## 什么时候使用
 
-Use this skill when a task touches:
+只要任务会影响可见 UI，就使用这个 skill：
 
-- pages
-- visible components
-- spacing
-- typography
-- color or surface treatment
-- navigation
-- dialogs, popovers, menus
-- cards, lists, settings, forms
-- any renderer-facing interaction surface
+- 页面、模块、组件
+- 间距、排版、颜色、字体、表面处理
+- 导航、弹窗、菜单、popover
+- 卡片、列表、设置、表单
+- 参考截图、当前截图、视觉风格调整
+- 组件库复用、组件替换、组件封装
+- 任何 renderer-facing surface
 
-Use it for both:
+以下情况不用：
 
-- optimizing an existing UI
-- adding a new page, module, or local interaction pattern
+- 后端-only 修改
+- 不影响 UI 的内部重构
+- 不改变渲染结果的纯技术修复
 
-Do not use it for:
+## 必读文件
 
-- backend-only changes
-- invisible refactors with no UI effect
-- purely technical fixes that do not alter the rendered surface
-
-## Required Reading
-
-Read these files before proposing UI changes:
+提出 UI 改法前必须读：
 
 1. `references/design.md`
 2. `references/workflow.md`
@@ -45,144 +37,167 @@ Read these files before proposing UI changes:
 4. `references/ui-communication-glossary.md`
 5. `references/screenshot-reading.md`
 
-Read these when relevant:
+涉及代码实现时还必须读：
 
 - `references/implementation-rules.md`
-  - required if the task includes implementation code
+
+需要更多页面模式、颜色家族、结构术语时再读：
+
 - `references/ui-glossary.md`
-  - required when you need pattern-family, color-family, or broader UI terminology
 
-## Hard Gates
+## 硬门槛
 
-Do not implement immediately after recognizing a UI task.
-Confirmation is not optional for UI work that involves screenshots, reference images, visual style, layout, hierarchy, density, color, or component treatment.
+识别到 UI 任务后，不允许直接实现。
 
-Before implementation, you must:
+只要任务涉及截图、参考图、视觉风格、布局、层级、密度、颜色、组件处理或组件库复用，确认就是必需步骤。
 
-1. identify the current `surface`
-2. identify the target `module`
-3. name the main `issues`
-4. propose the intended `adjustments`
-5. ask focused decision questions
-6. wait for explicit user confirmation before editing
+实现前必须完成：
 
-For any of these, user confirmation is required before implementation:
+1. 识别当前 `surface`
+2. 识别目标 `module`
+3. 说清主要 `issues`
+4. 提出计划中的 `adjustments`
+5. 提出聚焦的设计决策问题
+6. 等待用户明确确认后再改代码
+
+以下情况必须先确认：
 
 - `module change`
 - `new module`
-- any task that includes a current screenshot or reference screenshot
-- any small change that affects layout, hierarchy, color, typography, pattern choice, or density
+- 用户提供了当前截图或参考截图
+- 小改动但影响布局、层级、颜色、字体、模式选择、密度、组件库使用
 
-No confirmation means no implementation.
-If the user provided screenshots, first return a screenshot difference report and adjustment options, then wait.
+没有确认，就不能实现。
 
-Do not silently invent a new local UI pattern.
+如果用户提供截图，必须先返回截图差异报告和改法选项，然后停下来等待用户确认。
 
-Do not anchor the design discussion on a specific competitor name.
+## 截图任务必须输出
 
-Use generic pattern language such as:
+当用户提供当前截图、参考截图或模糊视觉反馈时，先输出：
 
-- `centered home workspace`
-- `project browsing workspace`
-- `capability discovery workspace`
-- `capability catalog workspace`
-- `board-style task workspace`
-- `settings analytics workspace`
-- `library browsing workspace`
-- `automation onboarding workspace`
+```text
+当前 surface（Current surface）:
+目标 module（Target module）:
+参考图阅读（Reference reading）:
+当前差异（Current mismatch）:
+可能原因（Likely cause）:
+推荐改法路径（Recommended adjustment paths）:
+需要你确认（Need your decision on）:
+```
 
-Use neutral color-family language such as:
+然后停止，等待用户确认。
 
-- `cool white base`
-- `warm off-white base`
-- `keep current neutral palette`
+不能在第一次截图分析的同一轮里直接改文件，除非用户已经明确确认了改法。
 
-## Execution Contract
+## 组件库复用协议
 
-### 1. Classify The Change
+Design Rail 不绑定某一个组件库。每个项目可以使用自己的组件库，例如 HeroUI、shadcn/ui、Radix、Headless UI 或内部组件系统。
 
-Classify the task as:
+进入实现前，agent 必须先检查当前项目的组件环境：
+
+1. 查看 `package.json` 是否已有 UI 组件库
+2. 查看项目组件入口，例如 `src/components/ui`、`src/renderer/components/ui`、`components/ui`
+3. 查看目标页面附近是否已有相似组件、卡片、行、弹窗、输入区、toolbar
+4. 先复用项目已有组件，再考虑直接使用已安装组件库
+5. 新增组件库或新造基础控件前必须问用户
+
+实现优先级：
+
+1. 项目已有业务组件
+2. 项目已有 `components/ui` 或类似 UI 入口
+3. 已安装组件库的 primitives
+4. 基于已有组件的小封装
+5. 自定义组件，且必须说明为什么不能复用
+
+禁止默认重写：
+
+- Button
+- Input
+- Select
+- Dialog / Modal
+- Tabs
+- Dropdown
+- Tooltip
+- Card
+- Badge
+- Switch / Checkbox
+- Table / List primitives
+
+## 执行流程
+
+### 1. 分类改动
+
+先把任务分类：
 
 - `small change`
 - `module change`
 - `new module`
 
-Then identify:
+然后识别：
 
-- current surface
-- target module
-- closest existing pattern
-- shell and hierarchy constraints
+- 当前 surface
+- 目标 module
+- 最近的已有模式
+- app shell 和层级约束
+- 可复用组件和组件库入口
 
-Use `references/workflow.md` for the full step-by-step process.
+完整流程见 `references/workflow.md`。
 
-### 2. Run The Confirmation Loop
+### 2. 运行确认循环
 
-Before implementation, return a structured UI reading:
+实现前必须返回结构化 UI reading：
 
 ```text
-Current surface:
-Target module:
-Observed issues:
-Proposed improvements:
-Pattern direction:
-Color direction:
-Density direction:
-Need your decision on:
+当前 surface（Current surface）:
+目标 module（Target module）:
+观察到的问题（Observed issues）:
+建议改法（Proposed improvements）:
+模式方向（Pattern direction）:
+颜色方向（Color direction）:
+密度方向（Density direction）:
+组件复用（Component reuse）:
+需要你确认（Need your decision on）:
 ```
 
-Minimum required fields:
+最低必须包含：
 
-- `Current surface`
-- `Target module`
-- `Observed issues`
-- `Proposed improvements`
+- `当前 surface（Current surface）`
+- `目标 module（Target module）`
+- `观察到的问题（Observed issues）`
+- `建议改法（Proposed improvements）`
 
-Use `references/ui-communication-glossary.md` for:
+如果涉及截图，还必须包含：
 
-- issue naming
-- adjustment language
-- decision prompts
-- response patterns
+- `参考图阅读（Reference reading）`
+- `当前差异（Current mismatch）`
+- `可能原因（Likely cause）`
+- `推荐改法路径（Recommended adjustment paths）`
+- `需要你确认（Need your decision on）`
 
-Use `references/screenshot-reading.md` for:
+然后停下来等待用户确认。
 
-- reading screenshot structure before proposing edits
-- translating vague visual feedback into specific UI issues
-- comparing the current UI and the reference UI on a small number of concrete axes
+### 3. 只在方向明确后实现
 
-If screenshots are involved, include:
+用户确认后：
 
-- `Reference reading`
-- `Current mismatch`
-- `Likely cause`
-- `Recommended adjustment paths`
-- `Need your decision on`
+- 写一句简短的 `Design direction`
+- 遵守 `workflow.md`
+- 遵守 `component-rules.md`
+- 涉及代码时遵守 `implementation-rules.md`
+- 优先复用当前项目组件和已安装组件库
 
-Then stop and wait for the user.
-Do not edit files in the same response unless the user has already confirmed the proposed path.
+不要静默创造新的局部 UI 模式。
 
-### 3. Implement Only After Direction Is Clear
+## 沟通规则
 
-After the user confirms the direction:
+讨论 UI 时不要停留在模糊词：
 
-- write a short design direction
-- follow `references/workflow.md`
-- obey `references/component-rules.md`
-- obey `references/implementation-rules.md` when code changes are involved
+- `更干净`
+- `更高级`
+- `更现代`
+- `更好看`
 
-Do not invent a new local UI pattern unless the user has explicitly confirmed that direction.
-
-## Communication Rules
-
-When discussing UI, do not rely on vague phrases like:
-
-- `make it cleaner`
-- `make it better`
-- `make it more advanced`
-- `make it more modern`
-
-Instead, structure communication as:
+必须翻译成：
 
 1. `surface`
 2. `module`
@@ -190,48 +205,50 @@ Instead, structure communication as:
 4. `adjustment`
 5. `decision`
 
-For non-trivial UI tasks, also confirm:
+非平凡 UI 任务还要确认：
 
 6. `pattern direction`
 7. `color direction`
 8. `density direction`
+9. `component reuse`
 
-## Vocabulary Routing
+## 术语路由
 
-Use `references/ui-communication-glossary.md` for:
+使用 `references/ui-communication-glossary.md` 处理：
 
-- page names
-- module names
-- component names
-- issue names
-- adjustment verbs
-- confirmation and response templates
+- 页面名
+- 模块名
+- 组件名
+- 问题名
+- 调整动词
+- 确认模板
+- 模糊反馈翻译
 
-Use `references/screenshot-reading.md` for:
+使用 `references/screenshot-reading.md` 处理：
 
-- screenshot analysis order
+- 截图阅读顺序
+- 当前截图和参考截图对比
 - visual contrast pairs
 - screenshot-to-decision prompts
-- converting "feels off" feedback into concrete design questions
 
-Use `references/ui-glossary.md` for:
+使用 `references/ui-glossary.md` 处理：
 
-- broader pattern families
-- surface and structure terminology
-- visual and interaction vocabulary
-- neutral color-family language
+- 更广泛的 pattern family
+- surface 和结构术语
+- 视觉和交互词汇
+- 中性颜色方向
 
-## Completion Standard
+## 完成标准
 
-A UI task is complete only when:
+UI 任务完成必须同时满足：
 
-- the feature works
-- the surface still feels like the same product
-- no unnecessary new pattern was introduced
-- code structure remains reasonable
-- key states were checked
-- the design direction was clear before implementation
-- the final UI was reviewed against skeleton, hierarchy, surface treatment, density, control language, and product consistency
-- visual verification is confirmed by an updated user screenshot or explicitly marked as pending user review
+- 功能可用
+- surface 仍然像同一个产品
+- 没有引入不必要的新模式
+- 代码结构合理
+- 已检查关键状态
+- 实现前设计方向已被确认
+- 已按 skeleton、hierarchy、surface treatment、density、control language、product consistency 做最终 review
+- 视觉验收由用户更新截图确认，或明确标记为 `pending user review`
 
-Use `references/workflow.md` for the detailed done standard and verification sequence.
+详细验收流程见 `references/workflow.md`。
