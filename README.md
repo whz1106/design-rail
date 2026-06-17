@@ -1,37 +1,40 @@
 # Design Rail
 
-Design Rail is a UI workflow skill for coding agents.
+Design Rail 是一套面向 coding agent 的前端 UI 工作流 skill。
 
-It helps agents and developers keep frontend UI changes consistent by requiring:
+它的目标是让不同开发者和不同 AI agent 在修改前端 UI 时遵守同一套流程，减少随意改风格、凭感觉重做页面、局部样式不一致等问题。
 
-- screenshot difference analysis before implementation
-- focused user confirmation for UI direction
-- shared UI terminology for vague visual feedback
-- conservative module-level changes before broad redesigns
-- reuse of existing components, theme tokens, and product patterns
-- screenshot-driven user review after implementation
+它要求 agent 在实现前先完成：
+
+- 截图差异分析
+- UI 方向确认
+- 模糊视觉反馈的术语化翻译
+- 模块级最小改动优先
+- 复用现有组件、主题 token 和产品模式
+- 改完后通过用户截图进行视觉验收
 
 ## Skill
 
-The current skill lives in:
+当前 skill 位于：
 
 ```text
 rongxinapp-ui/
 ```
 
-Use it when a task changes app UI, visible components, layout, styling, navigation, dialogs, cards, settings, lists, forms, color, typography, screenshot-referenced interfaces, or other renderer-facing surfaces in ways that could affect product consistency.
+当任务涉及 app UI、可见组件、布局、样式、导航、弹窗、卡片、设置页、列表、表单、颜色、字体、截图参考界面，或任何可能影响产品一致性的前端可见界面时，应使用该 skill。
 
-## Core Flow
+## 核心流程
 
-1. Identify the target surface and module.
-2. Read current and reference screenshots when provided.
-3. Return a screenshot difference report.
-4. Ask focused decision questions.
-5. Wait for explicit user confirmation.
-6. Implement the smallest confirmed UI change.
-7. Ask for user screenshot review when visual quality matters.
+1. 识别目标 `surface` 和 `module`。
+2. 如果用户提供截图，先阅读当前截图和参考截图。
+3. 返回截图差异报告。
+4. 提出聚焦的设计决策问题。
+5. 等待用户明确确认。
+6. 实现已确认的最小 UI 改动。
+7. 当视觉质量重要时，通过用户更新截图继续验收。
 
-## Repository Scope
+## 仓库范围
 
-This repository is intended to contain the reusable skill and its maintained references.
-Local competitor screenshots, copied third-party skills, and exploratory materials are intentionally excluded from version control.
+该仓库只维护可复用的 skill 和相关 reference 文档。
+
+本地竞品截图、复制的第三方 skill、探索性资料和临时素材不纳入版本控制。
